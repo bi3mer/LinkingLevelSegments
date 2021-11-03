@@ -1,4 +1,3 @@
-from Optimization.Operators import *
 from Utility.Mario.IO import get_levels
 from Utility.Mario.Behavior import *
 from Utility.Mario.Fitness import *
@@ -8,27 +7,8 @@ from Utility.LinkerGeneration import *
 from os.path import join
 
 name = 'Mario'
-
 data_dir = 'MarioData'
 
-flawed_agents = [
-    'NO_ENEMY',
-    'NO_HIGH_JUMP',
-    'NO_JUMP',
-    'NO_SPEED'
-]
-
-start_population_size = 500
-iterations = 80_000
-
-feature_names = ['linearity', 'leniency']
-feature_descriptors = [percent_linearity, percent_leniency]
-feature_dimensions = [[0, 1], [0, 1]] 
-
-elites_per_bin = 4
-resolution = 40
-
-uses_separate_simulation = False
 is_vertical = False
 
 n = 3
@@ -42,23 +22,6 @@ for level in levels:
 unigram_keys = set(unigram.grammar[()].keys())
 pruned = gram.fully_connect() # remove dead ends from grammar
 unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigram
-
-minimize_performance = True
-
-start_strand_size = 25
-max_strand_size = 25
-
-mutation_values = list(unigram_keys)
-mutate = Mutate(mutation_values, 0.02)
-crossover = SinglePointCrossover()
-
-n_mutate = NGramMutate(0.02, gram, max_strand_size)
-n_crossover = NGramCrossover(gram, start_strand_size, max_strand_size)
-population_generator = NGramPopulationGenerator(gram, start_strand_size)
-
-x_label = 'Linearity'
-y_label = 'Leniency'
-title = ''
 
 max_path_length = 5
 

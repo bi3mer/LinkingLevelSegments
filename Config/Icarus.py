@@ -1,5 +1,4 @@
 from dungeongrams.dungeongrams import *
-from Optimization.Operators import *
 from Utility.Icarus.IO import get_levels
 from Utility.Icarus.Behavior import *
 from Utility.Icarus.Fitness import *
@@ -10,17 +9,8 @@ from dungeongrams import *
 from os.path import join
 
 name = 'Icarus'
-
 data_dir = 'IcrauData'
 
-flawed_agents = []
-
-start_population_size = 500
-iterations = 120_000
-
-feature_names = ['density', 'leniency']
-feature_descriptors = [density, leniency]
-feature_dimensions = [[0, 0.5], [0, 0.5]] 
 
 n = 2
 gram = NGram(n)
@@ -33,32 +23,8 @@ for level in levels:
 unigram_keys = set(unigram.grammar[()].keys())
 pruned = gram.fully_connect() # remove dead ends from grammar
 unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigram
-
-resolution = 40
-elites_per_bin = 4
-
 fitness = lambda level: get_fitness(level, get_percent_playable(level))
-minimize_performance = True
-uses_separate_simulation = False
 is_vertical = True
-
-start_strand_size = 25
-max_strand_size = 25
-
-mutation_values = list(unigram_keys)
-mutate = Mutate(mutation_values, 0.02)
-crossover = SinglePointCrossover()
-
-n_mutate = NGramMutate(0.02, gram, max_strand_size)
-n_crossover = NGramCrossover(gram, start_strand_size, max_strand_size)
-population_generator = NGramPopulationGenerator(gram, start_strand_size)
-
-map_elites_config = join(data_dir, 'config_map_elites')
-data_file = join(data_dir, 'data')
-x_label = 'Density'
-y_label = 'Leniency'
-save_file = join(data_dir, 'map_elites')
-title = ''
 
 max_path_length = 4
 

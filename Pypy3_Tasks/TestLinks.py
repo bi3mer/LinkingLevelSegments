@@ -1,15 +1,16 @@
 from os.path import join, exists, isdir
-from random import seed
+from random import seed as random_seed
 from Utility.GridTools import columns_into_grid_string
 
 from Utility.LinkerGeneration import *
-from Utility import rows_into_columns, update_progress
-import json
+from Utility import rows_into_columns
+from json import load as json_load_file
 
 class TestLinks:
-    def __init__(self, config, __seed):
+    def __init__(self, config, alg_type, seed):
         self.config = config
-        seed(__seed)
+        self.alg_type = alg_type
+        random_seed(seed)
 
     def __string_to_key_and_index(self, string):
         split = string.split(',')
@@ -17,14 +18,18 @@ class TestLinks:
 
     def run(self):
         #######################################################################
-        print('Loading bins...')
-        level_dir =  join(self.config.data_dir, 'levels')
-        if not exists(level_dir) or not isdir(level_dir):
-            print(f'{level_dir} is not made. Run --generate-corpus first.')
+        print('Checking directory structure...')
+        DATA_DIR = join('GramElitesData', self.config.data_dir, self.alg_type)
+        LEVEL_DIR =  join(DATA_DIR, 'levels')
+        if not exists(LEVEL_DIR) or not isdir(LEVEL_DIR):
+            print(f'{LEVEL_DIR} does not exist. Please initialize the submodule first..')
+            return
 
+        #######################################################################
+        print('Loading bins...')
         bins = {}
-        with open(join(self.config.data_dir, 'generate_corpus_info.json')) as f:
-            data = json.load(f)
+        with open(join(DATA_DIR, 'generate_corpus_info.json')) as f:
+            data = json_load_file(f)
             for file_name in data['fitness']:
                 if data['fitness'][file_name] == 0.0:
                     # remove the .txt extension and take all indices except the last one
@@ -32,46 +37,91 @@ class TestLinks:
                     key = tuple(indices[:-1])
 
                     if key not in bins:
-                        bins[key] = [None for _ in range(self.config.elites_per_bin)]
+                        bins[key] = [None for _ in range(self.config.ELITES_PER_BIN)]
                     
-                    with open(join(level_dir, file_name), 'r') as level_file:
+                    with open(join(LEVEL_DIR, file_name), 'r') as level_file:
                         bins[key][indices[-1]] = rows_into_columns(level_file.readlines())
 
         #######################################################################
         print('Loading links...')
-        with open(join(self.config.data_dir, 'dda_graph.json')) as f:
-            graph = json.load(f)
+        with open(join(DATA_DIR, f'links.json')) as f:
+            graph = json_load_file(f)
 
         #######################################################################
         print('Testing links')
+        LINKER = 'tree search'
 
         count = 0
+        playable_counts = {
+            'tree search': [0, 0],
+            'concatenate': [0, 0]
+        }
+
+        valid_counts = {
+            'tree search': [0, 0],
+            'concatenate': [0, 0]
+        }
+
+        valid_and_playable_counts = {
+            'tree search': [0, 0],
+            'concatenate': [0, 0]
+        }
+
         for src_str in graph:
             src, src_index = self.__string_to_key_and_index(src_str)
             for dst_str in graph[src_str]:
                 dst, dst_index = self.__string_to_key_and_index(dst_str)
-                for linker in ['shortest', 'BC-match']:
-                    if graph[src_str][dst_str][linker]['percent_playable'] != 1.0:
-                        continue
-                    
-                    if graph[src_str][dst_str][linker]['link'] == None:
+
+                # check for counts
+                for link_name in playable_counts:
+                    if graph[src_str][dst_str][link_name]['link'] == None:
                         level = bins[src][src_index] + bins[dst][dst_index]
                     else:
                         level = bins[src][src_index] + \
-                                graph[src_str][dst_str][linker]['link'] + \
+                                graph[src_str][dst_str][link_name]['link'] + \
                                 bins[dst][dst_index]
 
-                    if not self.config.gram.sequence_is_possible(level):
-                        print('Sequence not possible!')
-                        print(f'Source: {src_str}')
-                        print(f'Linker: {linker}')
-                        print(f'Destination: {dst_str}')
-                        print(columns_into_grid_string(level))
+                    is_valid = self.config.level_is_valid(level)
+                    if is_valid:
+                        valid_counts[link_name][0] += 1
+                    valid_counts[link_name][1] += 1
 
-                        import sys
-                        sys.exit(-1)
+                    is_playable = graph[src_str][dst_str][link_name]['percent_playable'] == 1.0
+                    if is_playable:
+                        playable_counts[link_name][0] += 1
+                    playable_counts[link_name][1] += 1
 
-                    count += 1
+                    if is_valid and is_playable:
+                        valid_and_playable_counts[link_name][0] += 1
+                    valid_and_playable_counts[link_name][1] += 1
+
+                # this second part is extra error checking so it has some extra 
+                # work done but speed isn't a concern
+                if graph[src_str][dst_str][LINKER]['percent_playable'] != 1.0:
+                    continue
+                
+                if graph[src_str][dst_str][LINKER]['link'] == None:
+                    level = bins[src][src_index] + bins[dst][dst_index]
+                else:
+                    level = bins[src][src_index] + \
+                            graph[src_str][dst_str][LINKER]['link'] + \
+                            bins[dst][dst_index]
+
+                if not self.config.level_is_valid(level):
+                    print('Sequence not possible!')
+                    print(f'Source: {src_str}')
+                    print(f'Destination: {dst_str}')
+                    print(columns_into_grid_string(level))
+
+                    import sys
+                    sys.exit(-1)
+
+                count += 1
 
 
         print(f'\n{count} links tested and no errors found!\n')
+        for link_name in playable_counts:
+            print(f'{link_name}:')
+            print(f'{valid_counts[link_name][0]} out of {valid_counts[link_name][1]} are valid.')
+            print(f'{playable_counts[link_name][0]} out of {playable_counts[link_name][1]} are playable.')
+            print(f'{valid_and_playable_counts[link_name][0]} out of {valid_and_playable_counts[link_name][1]} are both.\n')

@@ -28,6 +28,7 @@ algorithm_group.add_argument('--gram-elites', action='store_true', help='Segment
 
 task_group = parser.add_mutually_exclusive_group(required=True)
 task_group.add_argument('--generate-links', action='store_true', help='Build plots from data generated with --generate-corpus')
+task_group.add_argument('--test-links', action='store_true', help='Test all links built with --test-links')
 
 args = parser.parse_args()
 
@@ -53,6 +54,8 @@ if args.generate_links:
         sys.exit(-1)
 
     GenerateLinks(config, alg_type, args.seed).run()
+elif args.test_links:
+    TestLinks(config, alg_type, args.seed).run()
     
 
 end = time()

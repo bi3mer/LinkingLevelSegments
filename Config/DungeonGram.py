@@ -1,6 +1,6 @@
 from dungeongrams.dungeongrams import *
-from Utility.DungeonGram.IO import get_levels
-from Utility.DungeonGram.Behavior import *
+from Game.DungeonGram.IO import get_levels
+from Game.DungeonGram.Behavior import *
 from Utility import NGram
 from Utility.GridTools import columns_into_rows
 from Utility.LinkerGeneration import *
@@ -12,6 +12,7 @@ data_dir = f'DungeonData'
 
 fitness = lambda lvl: get_fitness(lvl, get_percent_playable(lvl))
 is_vertical = False
+resolution = 40
 
 n = 3
 gram = NGram(n)
@@ -20,6 +21,8 @@ levels = get_levels()
 for level in levels:
     gram.add_sequence(level)
     unigram.add_sequence(level)
+
+ELITES_PER_BIN = 4
 
 unigram_keys = set(unigram.grammar[()].keys())
 pruned = gram.fully_connect() # remove dead ends from grammar
@@ -36,3 +39,7 @@ def get_percent_playable(level, thorough=False, agent=None):
 def get_fitness(level, percent_playable, agent=None):
     bad_transitions = gram.count_bad_n_grams(level)
     return bad_transitions + 1 - percent_playable
+
+
+def filter(level):
+    pass

@@ -1,4 +1,5 @@
 from Config import Mario, Icarus, DungeonGram
+from Pypy3_Tasks import *
 
 from time import time
 import argparse
@@ -26,7 +27,6 @@ algorithm_group.add_argument('--map-elites', action='store_true', help='Segments
 algorithm_group.add_argument('--gram-elites', action='store_true', help='Segments from Gram-Elites')
 
 task_group = parser.add_mutually_exclusive_group(required=True)
-task_group.add_argument('--train', action='store_true', help='Train a network for a game.')
 task_group.add_argument('--generate-links', action='store_true', help='Build plots from data generated with --generate-corpus')
 
 args = parser.parse_args()
@@ -47,14 +47,12 @@ elif args.gram_elites:
 else:
     alg_type = None
 
-if args.train:
-    pass
 if args.generate_links:
     if alg_type == None:
         print('Segments from algorithm type must be specified.')
         sys.exit(-1)
 
-    print('Generating links')
+    GenerateLinks(config, alg_type, args.seed).run()
     
 
 end = time()

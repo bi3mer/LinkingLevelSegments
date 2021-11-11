@@ -27,8 +27,9 @@ algorithm_group.add_argument('--map-elites', action='store_true', help='Segments
 algorithm_group.add_argument('--gram-elites', action='store_true', help='Segments from Gram-Elites')
 
 task_group = parser.add_mutually_exclusive_group(required=True)
-task_group.add_argument('--generate-links', action='store_true', help='Build plots from data generated with --generate-corpus')
-task_group.add_argument('--test-links', action='store_true', help='Test all links built with --test-links')
+task_group.add_argument('--generate-links', action='store_true', help='Build plots from data generated in GramElitesData')
+task_group.add_argument('--test-links', action='store_true', help='Test all links built with --generate-links')
+task_group.add_argument('--link-stats', action='store_true', help='Get stats of links built with --generate-links')
 
 args = parser.parse_args()
 
@@ -56,6 +57,9 @@ if args.generate_links:
     GenerateLinks(config, alg_type, args.seed).run()
 elif args.test_links:
     TestLinks(config, alg_type, args.seed).run()
+elif args.link_stats:
+    LinkStats(config, alg_type, args.seed).run()
+
     
 
 end = time()

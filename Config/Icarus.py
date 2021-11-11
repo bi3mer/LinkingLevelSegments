@@ -37,5 +37,16 @@ def get_fitness(level, percent_playable, agent=None):
     bad_n_grams = gram.count_bad_n_grams(level)
     return bad_n_grams + 1 - percent_playable
 
-def filter(level):
-    pass
+def level_is_valid(level):
+    num_columns = len(level[0])
+    for row_index in range(len(level)):
+        for col_index in range(num_columns):
+            if level[row_index][col_index] != 'D':
+                continue
+
+            new_row_index = row_index + 1
+            if new_row_index < len(level) and level[new_row_index][col_index] != 'd':
+                return False
+
+    return True
+

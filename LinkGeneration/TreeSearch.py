@@ -1,6 +1,9 @@
 from collections import deque
 
 def build_link(start, end, config, max_fitness_calculations=1_000):
+    assert config.level_is_valid(start)
+    assert config.level_is_valid(end)
+    
     if config.level_is_valid(start + end) and config.get_percent_playable(start + end) == 1.0:
         return []
 

@@ -2,7 +2,6 @@ from dungeongrams.dungeongrams import *
 from Game.DungeonGram.IO import get_levels
 from Game.DungeonGram.Behavior import *
 from Utility import NGram
-from Utility.GridTools import columns_into_rows
 from Utility.LinkerGeneration import *
 
 from dungeongrams import *
@@ -41,18 +40,17 @@ def get_fitness(level, percent_playable, agent=None):
     bad_transitions = gram.count_bad_n_grams(level)
     return bad_transitions + 1 - percent_playable
 
-def __check(c_index, c_length, r_index, r_length, lvl, char, seen_indices):
-    if r_index < r_length and c_index < c_length:
-        seen_indices.add((c_index, r_index))
-        return lvl[c_index][r_index] == char
-
-    return False
-
+def __check(c_index, r_index, lvl, char, seen_indices):
+    seen_indices.add((c_index, r_index))
+    return lvl[c_index][r_index] == char
 
 def level_is_valid(level):
     # Structure we're looking for
     # //\\
     # \\//
+    #
+    # I'm not going to claim that this will be the an efficient or 
+    # beautiful implementation. I'm looking for something that works.
     col_length = len(level)
     row_length = len(level[0])
 
@@ -64,22 +62,93 @@ def level_is_valid(level):
             if cor in seen_indices:
                 continue
             
-            if level[col_index][row_index] != '\\':
-                if level[col_index][row_index] == '/':
-                    return False
-
-                seen_indices.add((col_index, row_index))
+            char = level[col_index][row_index]
+            if char != '\\' and char != '/':
                 continue
-            
-            if not __check(col_index + 1, col_length, row_index, row_length, level, '\\', seen_indices) or \
-               not __check(col_index + 2, col_length, row_index, row_length, level, '/', seen_indices) or \
-               not __check(col_index + 3, col_length, row_index, row_length, level, '/', seen_indices) or \
-               not __check(col_index, col_length, row_index + 1, row_length, level, '/', seen_indices) or \
-               not __check(col_index + 1, col_length, row_index + 1, row_length, level, '/', seen_indices) or \
-               not __check(col_index + 2, col_length, row_index + 1, row_length, level, '\\', seen_indices) or \
-               not __check(col_index + 3, col_length, row_index + 1, row_length, level, '\\', seen_indices):
-               return False
 
+            if col_index == 0: # found at the start of the level
+                if char == '/':
+                    # |\
+                    # |/
+                    if level[col_index][row_index + 1] != '\\':
+                        return False
+                    elif level[col_index + 1][row_index] == '/':
+                        # |\\
+                        # |//
+                        if level[col_index + 1][row_index+1] == '\\':
+                            seen_indices.add((col_index, row_index))
+                            seen_indices.add((col_index, row_index + 1))
+                            seen_indices.add((col_index + 1, row_index))
+                            seen_indices.add((col_index + 1, row_index + 1))
+                        else:
+                            return False
+                    else:
+                        seen_indices.add((col_index, row_index))
+                        seen_indices.add((col_index, row_index + 1))
+                else:
+                    # |/\\
+                    # |\//
+                    if level[col_index][row_index + 1] != '/' and \
+                       level[col_index + 1][row_index] != '/' and \
+                       level[col_index + 1][row_index + 1] != '\\' and \
+                       level[col_index + 2][row_index] != '/' and \
+                       level[col_index + 2][row_index + 1] != '\\':
+                        return False
+                    elif level[col_index + 3][row_index] == '/':
+                        # |//\\
+                        # |\\//
+                        if level[col_index + 3][row_index + 1] != '\\':
+                            return False
+                        else:
+                            seen_indices.add((col_index, row_index))
+                            seen_indices.add((col_index, row_index + 1))
+                            seen_indices.add((col_index + 1, row_index))
+                            seen_indices.add((col_index + 1, row_index + 1))
+                            seen_indices.add((col_index + 2, row_index))
+                            seen_indices.add((col_index + 2, row_index + 1))
+                            seen_indices.add((col_index + 3, row_index))
+                            seen_indices.add((col_index + 3, row_index + 1))
+                    else:
+                        seen_indices.add((col_index, row_index))
+                        seen_indices.add((col_index, row_index + 1))
+                        seen_indices.add((col_index + 1, row_index))
+                        seen_indices.add((col_index + 1, row_index + 1))
+                        seen_indices.add((col_index + 2, row_index))
+                        seen_indices.add((col_index + 2, row_index + 1))
+                        
+            elif col_index == col_length - 1:
+                # /|
+                # \|
+                if not __check(col_index, row_index + 1, level, '/', seen_indices):
+                    return False
+            elif col_index == col_length - 2:
+                # //|
+                # \\|
+                if not __check(col_index, row_index + 1, level, '/', seen_indices) or \
+                   not __check(col_index + 1, row_index, level, '\\', seen_indices) or \
+                   not __check(col_index + 1, row_index + 1, level, '/', seen_indices):
+                    return False
+            elif col_index == col_length - 3:
+                # //\|
+                # \\/|
+                if not __check(col_index, row_index + 1, level, '/', seen_indices) or \
+                   not __check(col_index + 1, row_index, level, '\\', seen_indices) or \
+                   not __check(col_index + 1, row_index + 1, level, '/', seen_indices) or \
+                   not __check(col_index + 2, row_index, level, '/', seen_indices) or \
+                   not __check(col_index + 2, row_index + 1, level, '\\', seen_indices):
+                    return False
+            else:
+                # //\\
+                # \\//
+                if not __check(col_index, row_index + 1, level, '/', seen_indices) or \
+                   not __check(col_index + 1, row_index, level, '\\', seen_indices) or \
+                   not __check(col_index + 1, row_index + 1, level, '/', seen_indices) or \
+                   not __check(col_index + 2, row_index, level, '/', seen_indices) or \
+                   not __check(col_index + 2, row_index + 1, level, '\\', seen_indices) or \
+                   not __check(col_index + 3, row_index, level, '/', seen_indices) or \
+                   not __check(col_index + 3, row_index + 1, level, '\\', seen_indices):
+                    return False
+                
     return True
 
 

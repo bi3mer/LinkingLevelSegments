@@ -23,7 +23,8 @@ game_group.add_argument('--dungeongram', action='store_true', help='Run DungeonG
 game_group.add_argument('--mario', action='store_true', help='Run Mario')
 game_group.add_argument('--icarus', action='store_true', help='Run Icarus')
 
-algorithm_group = parser.add_mutually_exclusive_group(required='--generate-links' in sys.argv)
+arg_exists = any(['--generate-links' in sys.argv, '--debug-segments-are-valid' in sys.argv])
+algorithm_group = parser.add_mutually_exclusive_group(required=arg_exists)
 algorithm_group.add_argument('--n-gram-placement', action='store_true', help='Segments from N-Grams with placement into bins')
 algorithm_group.add_argument('--map-elites', action='store_true', help='Segments from MAP-Elites with standard operators')
 algorithm_group.add_argument('--gram-elites', action='store_true', help='Segments from Gram-Elites')
@@ -32,7 +33,6 @@ task_group = parser.add_mutually_exclusive_group(required=True)
 task_group.add_argument('--generate-links', action='store_true', help='Build plots from data generated in GramElitesData')
 task_group.add_argument('--test-links', action='store_true', help='Test all links built with --generate-links')
 task_group.add_argument('--link-stats', action='store_true', help='Get stats of links built with --generate-links')
-
 task_group.add_argument('--debug-build-link', action='store_true', help='DEBUG that building a link between two training levels works')
 task_group.add_argument('--debug-segments-are-valid', action='store_true', help='DEBUG that all segments in GramElitesData are valid for an [alg-type]')
 task_group.add_argument('--debug-test-levels', action='store_true', help='DEBUG test levels in the test_levels directory for level_is_valid')

@@ -2,6 +2,7 @@ from Game.Mario.IO import get_levels
 from Game.Mario.Behavior import *
 from Game.Mario.Fitness import *
 from Utility import NGram
+from Utility.GridTools import rows_into_columns
 from Utility.LinkerGeneration import *
 
 name = 'Mario'
@@ -10,10 +11,12 @@ data_dir = 'MarioData'
 is_vertical = False
 resolution = 40
 
+lines_to_level = rows_into_columns
+
 n = 3
 gram = NGram(n)
 unigram = NGram(1)
-levels = get_levels()
+levels = get_levels(lines_to_level)
 for level in levels:
     gram.add_sequence(level)
     unigram.add_sequence(level)

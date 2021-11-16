@@ -5,6 +5,7 @@ from Utility.GridTools import columns_into_grid_string
 from Utility.LinkerGeneration import *
 from Utility import rows_into_columns
 from json import load as json_load_file
+from sys import exit
 
 class TestLinks:
     def __init__(self, config, alg_type, seed):
@@ -107,14 +108,20 @@ class TestLinks:
                             graph[src_str][dst_str][LINKER]['link'] + \
                             bins[dst][dst_index]
 
+                # if graph[src_str][dst_str][LINKER]['link'] != []:
+                #     print()
+                #     for r in reversed(level):
+                #         print(r)
+                #     print(graph[src_str][dst_str][LINKER]['link'])
+                #     exit(-1)
+
                 if not self.config.level_is_valid(level):
                     print('Sequence not possible!')
                     print(f'Source: {src_str}')
                     print(f'Destination: {dst_str}')
                     print(columns_into_grid_string(level))
 
-                    import sys
-                    sys.exit(-1)
+                    exit(-1)
 
                 count += 1
 

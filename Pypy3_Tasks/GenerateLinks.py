@@ -3,7 +3,6 @@ from random import seed as random_seed
 from os.path import join, exists, isdir
 
 from Utility.ProgressBar import update_progress
-from Utility.GridTools import rows_into_columns
 from LinkGeneration import Concatenation, TreeSearch
 
 class GenerateLinks:
@@ -40,7 +39,7 @@ class GenerateLinks:
                         bins[key] = [None for _ in range(self.config.ELITES_PER_BIN)]
                     
                     with open(join(LEVEL_DIR, file_name), 'r') as level_file:
-                        bins[key][indices[-1]] = rows_into_columns(level_file.readlines())
+                        bins[key][indices[-1]] = self.config.lines_to_level(level_file.readlines())
 
         #######################################################################
         print('Generating links...')
@@ -57,7 +56,7 @@ class GenerateLinks:
         link_count = 0
 
         for k in keys: 
-            update_progress(i/len(keys))
+            if i >= 1000: break
 
             for entry_index, entry in enumerate(bins[k]):
                 if entry == None:
@@ -80,6 +79,10 @@ class GenerateLinks:
                     
                     start = entry
                     for n_index, n_entry in enumerate(bins[neighbor]):
+                        update_progress(i/(len(keys)*19))
+                        i += 1
+                        if i >= 1000: break
+
                         if n_entry == None:
                             continue
 

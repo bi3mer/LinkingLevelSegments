@@ -3,7 +3,7 @@ from random import seed as random_seed
 from os.path import join
 from sys import exit
 
-from Utility.GridTools import columns_into_grid_string, rows_into_columns
+from Utility.GridTools import columns_into_grid_string
 
 class DEBUG_segments_are_valid:
     def __init__(self, config, alg_type, seed):
@@ -19,7 +19,7 @@ class DEBUG_segments_are_valid:
             data = json_load_file(f)
             for file_name in data['fitness']:
                 with open(join(LEVEL_DIR, file_name), 'r') as level_file:
-                    level = rows_into_columns(level_file.readlines())
+                    level = self.config.lines_to_level(level_file.readlines())
 
                     if not self.config.level_is_valid(level):
                         print(columns_into_grid_string(level))

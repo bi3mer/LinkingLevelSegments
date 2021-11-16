@@ -3,6 +3,7 @@ from Game.DungeonGram.IO import get_levels
 from Game.DungeonGram.Behavior import *
 from Utility import NGram
 from Utility.LinkerGeneration import *
+from Utility.GridTools import columns_into_rows, rows_into_columns
 
 from dungeongrams import *
 
@@ -13,10 +14,12 @@ fitness = lambda lvl: get_fitness(lvl, get_percent_playable(lvl))
 is_vertical = False
 resolution = 40
 
+lines_to_level = rows_into_columns
+
 n = 3
 gram = NGram(n)
 unigram = NGram(1)
-levels = get_levels()
+levels = get_levels(lines_to_level)
 for level in levels:
     gram.add_sequence(level)
     unigram.add_sequence(level)
@@ -30,11 +33,10 @@ unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigra
 max_path_length = 4
 
 def get_percent_playable(level, thorough=False, agent=None):
-    # if agent == None:
-    #     agent = FLAW_NO_FLAW
+    if agent == None:
+        agent = FLAW_NO_FLAW
 
-    # return percent_playable(columns_into_rows(level), False, True, thorough, agent)
-    return 1.0
+    return percent_playable(columns_into_rows(level), False, True, thorough, agent)
 
 def get_fitness(level, percent_playable, agent=None):
     bad_transitions = gram.count_bad_n_grams(level)

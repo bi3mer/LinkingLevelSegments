@@ -5,7 +5,7 @@ def update_progress(progress, message=None):
     modifed from: https://stackoverflow.com/questions/3160699/python-progress-bar
     NOTE: tqdm is better but avoiding dependencies for pypy
     '''
-    barLength = 20 # Modify this to change the length of the progress bar
+    barLength = 40 # Modify this to change the length of the progress bar
     status = ""
     if isinstance(progress, int):
         progress = float(progress)
@@ -23,9 +23,9 @@ def update_progress(progress, message=None):
     block = int(round(barLength*progress))
 
     if message != None:
-        text = f'\rPercent [{"#"*block + "-"*(barLength-block)}] {round(progress*100, 2)}% {status} :: {message}'
+        text = f'\rPercent [{"#"*block + "-"*(barLength-block)}] {round(progress*100, 4)}% {status} :: {message}'
     else:
-        text = f'\rPercent [{"#"*block + "-"*(barLength-block)}] {round(progress*100, 2)}% {status}'
+        text = f'\rPercent [{"#"*block + "-"*(barLength-block)}] {round(progress*100, 4)}% {status}'
         
     sys.stdout.write(text)
     sys.stdout.flush()

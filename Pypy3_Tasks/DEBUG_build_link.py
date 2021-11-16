@@ -8,8 +8,17 @@ class DEBUG_build_link:
         random_seed(seed)
 
     def run(self):
-        start = self.config.levels[0]
-        end = self.config.levels[1]
+        start = self.config.levels[0][5:20]
+        end = self.config.levels[1][5:25]
 
+        for a in end:
+            print(a)
+
+        print('|||||||||||||||||||')
         link = TreeSearch.build_link(start, end, self.config)
         print(link)
+        print('|||||||||||||||||||')
+
+        for a in start:
+            print(a)
+        

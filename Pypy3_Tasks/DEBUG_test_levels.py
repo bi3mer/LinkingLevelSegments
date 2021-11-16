@@ -10,6 +10,7 @@ class DEBUG_test_levels:
 
     def run(self):
         DATA_DIR = join('test_levels', self.config.data_dir)
+        test_failed = False
 
         for file_name in listdir(DATA_DIR):
             if not file_name.endswith('.txt'):
@@ -21,5 +22,9 @@ class DEBUG_test_levels:
 
                 if self.config.level_is_valid(level) == should_be_invalid:
                     print(f'{join(DATA_DIR, file_name)} does not have the expected result!')
+                    test_failed = True
+                    import sys
+                    sys.exit(-1)
 
-        print('All tests pass!')
+        if not test_failed:
+            print('All tests pass!')

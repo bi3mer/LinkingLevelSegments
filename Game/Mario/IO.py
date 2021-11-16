@@ -1,7 +1,7 @@
-from Utility.GridTools import rows_into_columns, columns_into_grid_string
+from Utility.GridTools import columns_into_grid_string
 import os
 
-def get_levels():
+def get_levels(lines_to_level):
     levels = []
     skip_levels = [
         'mario-1-2.txt', 'mario-1-3.txt', 'mario-2-1.txt', 'mario-3-3.txt', 
@@ -14,7 +14,7 @@ def get_levels():
             continue
             
         f = open(os.path.join('vglc_levels', 'Mario', file_name))
-        levels.append(rows_into_columns(f.readlines()))
+        levels.append(lines_to_level(f.readlines()))
         f.close()
 
     return levels

@@ -8,17 +8,11 @@ class DEBUG_build_link:
         random_seed(seed)
 
     def run(self):
-        start = self.config.levels[0][5:20]
-        end = self.config.levels[1][5:25]
+        f = open('temp.txt')
+        lvl = self.config.lines_to_level(f.readlines())
+        f.close()
 
-        for a in end:
-            print(a)
-
-        print('|||||||||||||||||||')
-        link = TreeSearch.build_link(start, end, self.config)
-        print(link)
-        print('|||||||||||||||||||')
-
-        for a in start:
-            print(a)
+        link = TreeSearch.build_link(lvl, lvl, self.config)
+        
+        print(self.config.level_to_str(lvl + link + lvl))
         

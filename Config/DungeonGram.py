@@ -1,5 +1,5 @@
 from dungeongrams.dungeongrams import *
-from Game.DungeonGram.IO import get_levels
+from Game.DungeonGram.IO import get_levels, level_to_str
 from Game.DungeonGram.Behavior import *
 from Utility import NGram
 from Utility.LinkerGeneration import *
@@ -15,6 +15,7 @@ is_vertical = False
 resolution = 40
 
 lines_to_level = rows_into_columns
+link_distance_dependent = True
 
 n = 3
 gram = NGram(n)
@@ -24,11 +25,20 @@ for level in levels:
     gram.add_sequence(level)
     unigram.add_sequence(level)
 
+
 ELITES_PER_BIN = 4
 
 unigram_keys = set(unigram.grammar[()].keys())
 pruned = gram.fully_connect() # remove dead ends from grammar
 unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigram
+
+link_keys = [
+    '-----------',
+    '-----&-----',
+]
+for row in unigram_keys:
+    if '/' in row or '\\' in row:
+        link_keys.append(row)
 
 max_path_length = 4
 

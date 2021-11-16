@@ -12,6 +12,7 @@ is_vertical = False
 resolution = 40
 
 lines_to_level = rows_into_columns
+link_distance_dependent = False
 
 n = 3
 gram = NGram(n)
@@ -27,6 +28,7 @@ unigram_keys = set(unigram.grammar[()].keys())
 pruned = gram.fully_connect() # remove dead ends from grammar
 unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigram
 
+link_keys = unigram_keys
 max_path_length = 5
 
 def get_percent_playable(level, agent=None):

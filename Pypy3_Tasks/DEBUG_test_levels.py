@@ -15,7 +15,7 @@ class DEBUG_test_levels:
         for file_name in listdir(DATA_DIR):
             if not file_name.endswith('.txt'):
                 continue
-
+            
             should_be_invalid = 'invalid' in file_name
             with open(join(DATA_DIR, file_name), 'r') as level_file:
                 level = rows_into_columns(level_file.readlines())

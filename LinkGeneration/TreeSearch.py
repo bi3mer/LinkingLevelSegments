@@ -1,7 +1,14 @@
 from collections import deque
 
 def build_link(start, end, config, max_fitness_calculations=1_000):
-    if config.level_is_valid(start + end) and config.get_percent_playable(start + end) == 1.0:
+    start_and_end_viable = config.level_is_valid(start + end)
+    start_and_end_playable = config.get_percent_playable(start + end) == 1.0
+    if start_and_end_viable and start_and_end_playable:
+        return []
+
+    if config.link_distance_dependent and \
+       not start_and_end_viable and \
+       not start_and_end_playable:
         return []
 
     output = config.link_keys
@@ -11,14 +18,13 @@ def build_link(start, end, config, max_fitness_calculations=1_000):
     while fitness_calculations < max_fitness_calculations:
         current_path = queue.popleft()
         NEW_LEVEL = start + current_path + end
-        if config.get_percent_playable(NEW_LEVEL) == 1.0:
-            return current_path
-        else:
-            fitness_calculations += 1
+        if config.level_is_valid(NEW_LEVEL):
+            if config.get_percent_playable(NEW_LEVEL) == 1.0:
+                return current_path
+            else:
+                fitness_calculations += 1
 
         for new_column in output:
-            LINK = current_path + [new_column]
-            if config.level_is_valid(start + LINK + end):
-                queue.append(LINK)
+            queue.append(current_path + [new_column])
 
     return None

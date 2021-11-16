@@ -11,6 +11,7 @@ data_dir = 'IcarusData'
 
 resolution = 40
 
+link_distance_dependent = False
 def lines_to_level(lines):
     return[l.strip() for l in reversed(lines)]
 

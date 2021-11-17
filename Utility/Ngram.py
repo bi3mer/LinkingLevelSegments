@@ -10,10 +10,17 @@ class NGram():
         self.n = size
         self.grammar = {}
 
-    def add_sequence(self, sequence):
+    def add_sequence(self, sequence, backward=False, filter=lambda row: True):
         queue = deque([], maxlen=self.input_size)
 
+        if backward:
+            sequence = reversed(sequence)
+
         for token in sequence:
+            if not filter(token):
+                queue.clear()
+                continue
+
             if len(queue) == queue.maxlen:
                 key = tuple(queue)
                 if key not in self.grammar:

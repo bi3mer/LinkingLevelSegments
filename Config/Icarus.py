@@ -2,7 +2,7 @@ from dungeongrams.dungeongrams import *
 from Game.Icarus.IO import get_levels, level_to_str
 from Game.Icarus.Behavior import *
 from Game.Icarus.Fitness import *
-from Utility import NGram
+from Utility import NGram, Ngram
 from Utility.LinkerGeneration import *
 from dungeongrams import *
 
@@ -18,10 +18,22 @@ def lines_to_level(lines):
 n = 2
 gram = NGram(n)
 unigram = NGram(1)
-levels = get_levels(lines_to_level)
-for level in levels:
+FORWARD_STRUCTURE_GRAM = NGram(2)
+BACKWARD_STRUCTURE_GRAM = NGram(2)
+LEVELS = get_levels(lines_to_level)
+
+for level in LEVELS:
     gram.add_sequence(level)
     unigram.add_sequence(level)
+
+    FORWARD_STRUCTURE_GRAM.add_sequence(level, filter=lambda row: 'd' in row or 'D' in row)
+    # BACKWARD_STRUCTURE_GRAM.add_sequence(level, backward=True, filter=lambda row: 'd' in row or 'D' in row)
+
+# for k in FORWARD_STRUCTURE_GRAM.grammar:
+#     print(k, FORWARD_STRUCTURE_GRAM.grammar[k])
+
+# import sys
+# sys.exit(-1)
 
 ELITES_PER_BIN = 4
 
@@ -29,15 +41,23 @@ unigram_keys = set(unigram.grammar[()].keys())
 pruned = gram.fully_connect() # remove dead ends from grammar
 unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigram
 
-link_keys = unigram_keys
-link_keys = [
-    '----------------',
-    '---XXXX--XXXX---',
-    'XXX----XX----XXX'
+LINKERS = [
+    ['----------------'],
+    ['---XXXX--XXXX---'],
+    ['XXX----XX----XXX'],
+    ['---XXXX--XXXX---', '----------------', '----------------', 'XXX----XX----XXX'],
+    ['XXX----XX----XXX', '----------------', '----------------', '---XXXX--XXXX---'],
 ]
-for row in unigram_keys:
-    if 'd' in row or 'D' in row:
-        link_keys.append(row)
+
+
+# for row in unigram_keys:
+#     if 
+
+
+#     if 'd' in row or 'D' in row:
+#         validity_keys.append([row])
+
+max_link_length = 7
 
 fitness = lambda level: get_fitness(level, get_percent_playable(level))
 is_vertical = True
@@ -65,20 +85,19 @@ def level_is_valid(level):
                 continue
 
             # Case 1: Door is incomplete at the start D|d---
-            if col_index == 0 and current_char == 'd':
+            if row_index == 0 and current_char == 'd':
                 seen.add((row_index, col_index))
             
             # case 2: door is incomplete at end ------D|d
-            elif col_index == len(level[0]) - 1: 
+            elif row_index == len(level) - 1: 
                 if current_char == 'D':
                     seen.add((row_index, col_index)) # technically not necessary
             
             # Case 3: door is full, Dd
-            elif current_char == 'D' and level[row_index][col_index + 1] == 'd':
+            elif current_char == 'D' and level[row_index + 1][col_index] == 'd':
                 seen.add((row_index, col_index))
-                seen.add((row_index, col_index + 1))
+                seen.add((row_index + 1, col_index))
             else:
                 return False
 
     return True
-

@@ -3,8 +3,6 @@ from random import seed as random_seed
 from os.path import join
 from sys import exit
 
-from Utility.GridTools import columns_into_grid_string
-
 class DEBUG_segments_are_valid:
     def __init__(self, config, alg_type, seed):
         self.alg_type = alg_type
@@ -22,6 +20,6 @@ class DEBUG_segments_are_valid:
                     level = self.config.lines_to_level(level_file.readlines())
 
                     if not self.config.level_is_valid(level):
-                        print(columns_into_grid_string(level))
+                        print(self.config.level_to_str(level))
                         print(f'{join(LEVEL_DIR, file_name)} is not valid!')
                         exit(-1)

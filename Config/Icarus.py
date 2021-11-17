@@ -1,5 +1,5 @@
 from dungeongrams.dungeongrams import *
-from Game.Icarus.IO import get_levels
+from Game.Icarus.IO import get_levels, level_to_str
 from Game.Icarus.Behavior import *
 from Game.Icarus.Fitness import *
 from Utility import NGram
@@ -32,8 +32,8 @@ unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigra
 link_keys = unigram_keys
 link_keys = [
     '----------------',
-    '---TTTT--TTTT---',
-    'TTT----TT----TTT'
+    '---XXXX--XXXX---',
+    'XXX----XX----XXX'
 ]
 for row in unigram_keys:
     if 'd' in row or 'D' in row:

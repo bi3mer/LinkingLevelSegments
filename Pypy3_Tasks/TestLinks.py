@@ -41,7 +41,7 @@ class TestLinks:
                         bins[key] = [None for _ in range(self.config.ELITES_PER_BIN)]
                     
                     with open(join(LEVEL_DIR, file_name), 'r') as level_file:
-                        bins[key][indices[-1]] = rows_into_columns(level_file.readlines())
+                        bins[key][indices[-1]] = self.config.lines_to_level(level_file.readlines())
 
         #######################################################################
         print('Loading links...')

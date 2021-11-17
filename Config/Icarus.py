@@ -15,6 +15,8 @@ link_distance_dependent = False
 def lines_to_level(lines):
     return[l.strip() for l in reversed(lines)]
 
+
+BETWEN_LINK_TOKEN = '                '
 n = 2
 gram = NGram(n)
 unigram = NGram(1)
@@ -27,13 +29,7 @@ for level in LEVELS:
     unigram.add_sequence(level)
 
     FORWARD_STRUCTURE_GRAM.add_sequence(level, filter=lambda row: 'd' in row or 'D' in row)
-    # BACKWARD_STRUCTURE_GRAM.add_sequence(level, backward=True, filter=lambda row: 'd' in row or 'D' in row)
-
-# for k in FORWARD_STRUCTURE_GRAM.grammar:
-#     print(k, FORWARD_STRUCTURE_GRAM.grammar[k])
-
-# import sys
-# sys.exit(-1)
+    BACKWARD_STRUCTURE_GRAM.add_sequence(level, backward=True, filter=lambda row: 'd' in row or 'D' in row)
 
 ELITES_PER_BIN = 4
 
@@ -42,20 +38,10 @@ pruned = gram.fully_connect() # remove dead ends from grammar
 unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigram
 
 LINKERS = [
-    ['----------------'],
     ['---XXXX--XXXX---'],
     ['XXX----XX----XXX'],
-    ['---XXXX--XXXX---', '----------------', '----------------', 'XXX----XX----XXX'],
-    ['XXX----XX----XXX', '----------------', '----------------', '---XXXX--XXXX---'],
+    ['----------------'],
 ]
-
-
-# for row in unigram_keys:
-#     if 
-
-
-#     if 'd' in row or 'D' in row:
-#         validity_keys.append([row])
 
 max_link_length = 7
 

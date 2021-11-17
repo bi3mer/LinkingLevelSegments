@@ -1,34 +1,35 @@
 from collections import deque
 
-def build_link(start, end, config, max_fitness_calculations=1_000):
-    start_and_end_viable = config.level_is_valid(start + end)
-    start_and_end_playable = config.get_percent_playable(start + end) == 1.0
-    if start_and_end_viable and start_and_end_playable:
+from Config.Icarus import FORWARD_STRUCTURE_GRAM
+
+def build_link(start, end, config):
+    if config.level_is_valid(start + end) and config.get_percent_playable(start + end) == 1.0:
         return []
 
-    if config.link_distance_dependent and \
-       not start_and_end_viable and \
-       not start_and_end_playable:
+    START_LINK = config.FORWARD_STRUCTURE_GRAM.generate((start[-1],), 100) # FORWARD_STRUCTURE_GRAM
+    END_LINK = config.BACKWARD_STRUCTURE_GRAM.generate((end[0],), 100)     # BACKWARD_STRUCTURE_GRAM
+    END_LINK = list(reversed(END_LINK))
+
+    assert start + START_LINK + END_LINK + end
+
+    if config.get_percent_playable(start + START_LINK + END_LINK + end) == 1.0:
         return []
 
-    output = config.link_keys
+    output = config.LINKERS
     queue = deque([o for o in output])
 
     fitness_calculations = 0
-    while fitness_calculations < max_fitness_calculations:
+    while len(queue) > 0:
         current_path = queue.popleft()
-        NEW_LEVEL = start + current_path + end
+        NEW_LEVEL = start + START_LINK + current_path + END_LINK + end
 
-        if config.level_is_valid(NEW_LEVEL):
-            if config.get_percent_playable(NEW_LEVEL) == 1.0:
-                return current_path
-            else:
-                fitness_calculations += 1
+        if config.get_percent_playable(NEW_LEVEL) == 1.0:
+            return START_LINK + current_path + END_LINK
+        else:
+            fitness_calculations += 1
 
         if len(current_path) < config.max_link_length:
             for o in output:
                 queue.append(current_path + o)
-
-        
 
     return None

@@ -17,6 +17,8 @@ parser.add_argument(
     default=10,
     help='Set the # of runs for --average-generated.')
 parser.add_argument('--segments', type=int, default=3, help='set # of segments to be combined.')
+parser.add_argument('--src', type=str, default='0_0_0.txt', help='source segment linked with --debug-view-link')
+parser.add_argument('--tgt', type=str, default='0_0_0.txt', help='source segment linked with --debug-view-link')
 
 game_group = parser.add_mutually_exclusive_group(required=True)
 game_group.add_argument('--dungeongram', action='store_true', help='Run DungeonGrams')
@@ -36,6 +38,9 @@ task_group.add_argument('--link-stats', action='store_true', help='Get stats of 
 task_group.add_argument('--debug-build-link', action='store_true', help='DEBUG that building a link between two training levels works')
 task_group.add_argument('--debug-segments-are-valid', action='store_true', help='DEBUG that all segments in GramElitesData are valid for an [alg-type]')
 task_group.add_argument('--debug-test-levels', action='store_true', help='DEBUG test levels in the test_levels directory for level_is_valid')
+task_group.add_argument('--debug-view-link', action='store_true', help='view a link between two segments')
+
+
 
 args = parser.parse_args()
 
@@ -71,6 +76,8 @@ elif args.debug_segments_are_valid:
     DEBUG_segments_are_valid(config, alg_type, args.seed).run()
 elif args.debug_test_levels:
     DEBUG_test_levels(config, alg_type).run()
+elif args.debug_view_link:
+    DEBUG_view_link(config, alg_type).run(args.src, args.tgt)
 
 end = time()
 

@@ -17,14 +17,20 @@ resolution = 40
 lines_to_level = rows_into_columns
 link_distance_dependent = True
 
+BETWEN_LINK_TOKEN = '           '
+
 n = 3
 gram = NGram(n)
 unigram = NGram(1)
+FORWARD_STRUCTURE_GRAM = NGram(2)
+BACKWARD_STRUCTURE_GRAM = NGram(2)
 levels = get_levels(lines_to_level)
 for level in levels:
     gram.add_sequence(level)
     unigram.add_sequence(level)
 
+    FORWARD_STRUCTURE_GRAM.add_sequence(level, filter=lambda row: '/' in row or '\\' in row)
+    BACKWARD_STRUCTURE_GRAM.add_sequence(level, backward=True, filter=lambda row: '/' in row or '\\' in row)
 
 ELITES_PER_BIN = 4
 
@@ -32,15 +38,12 @@ unigram_keys = set(unigram.grammar[()].keys())
 pruned = gram.fully_connect() # remove dead ends from grammar
 unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigram
 
-link_keys = [
-    '-----------',
-    '-----&-----',
+LINKERS = [
+    ['-----&-----'],
+    ['-----------'],
 ]
-for row in unigram_keys:
-    if '/' in row or '\\' in row:
-        link_keys.append(row)
+MAX_LINK_LENGTH = 4
 
-max_path_length = 4
 
 def get_percent_playable(level, thorough=False, agent=None):
     if agent == None:
@@ -165,3 +168,35 @@ def level_is_valid(level):
 
 
             
+# def all_structures_complete(level):
+#     col_length = len(level)
+#     row_length = len(level[0])
+
+#     seen_indices = set()
+
+#     for col_index in range(col_length):
+#         for row_index in range(row_length):
+#             cor = (col_index, row_index)
+#             if cor in seen_indices:
+#                 continue
+
+#             if level[col_index][row_index] != '\\':
+#                 if level[col_index][row_index] == '/':
+#                     return False
+
+#                 seen_indices.add((col_index, row_index))
+#                 continue
+            
+#             if col_index + 3 >= col_length or row_index + 1 >= row_length:
+#                 return False
+                
+#             if not __check(col_index + 1, row_index, level, '\\', seen_indices) or \
+#                not __check(col_index + 2, row_index, level, '/', seen_indices) or \
+#                not __check(col_index + 3, row_index, level, '/', seen_indices) or \
+#                not __check(col_index, row_index + 1, level, '/', seen_indices) or \
+#                not __check(col_index + 1, row_index + 1, level, '/', seen_indices) or \
+#                not __check(col_index + 2, row_index + 1, level, '\\', seen_indices) or \
+#                not __check(col_index + 3, row_index + 1, level, '\\', seen_indices):
+#                return False
+
+#     return True

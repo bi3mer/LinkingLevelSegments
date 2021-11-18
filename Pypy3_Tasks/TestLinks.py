@@ -108,13 +108,6 @@ class TestLinks:
                             graph[src_str][dst_str][LINKER]['link'] + \
                             bins[dst][dst_index]
 
-                # if graph[src_str][dst_str][LINKER]['link'] != []:
-                #     print()
-                #     for r in reversed(level):
-                #         print(r)
-                #     print(graph[src_str][dst_str][LINKER]['link'])
-                #     exit(-1)
-
                 if not self.config.level_is_valid(level):
                     print('Sequence not possible!')
                     print(f'Source: {src_str}')

@@ -43,13 +43,12 @@ LINKERS = [
     ['----------------'],
 ]
 
-max_link_length = 7
+MAX_LINK_LENGTH = 7
 
 fitness = lambda level: get_fitness(level, get_percent_playable(level))
 is_vertical = True
 
 max_path_length = 4
-
 __percent_completable = build_slow_fitness_function(gram)
 def get_percent_playable(level, agent=None):
     return __percent_completable(level)
@@ -87,3 +86,24 @@ def level_is_valid(level):
                 return False
 
     return True
+
+# def all_structures_complete(level):
+#     num_columns = len(level[0])
+#     seen = set()
+#     for row_index in range(len(level)):
+#         for col_index in range(num_columns):
+#             current_char = level[row_index][col_index]
+#             if current_char != 'D' and current_char != 'd':
+#                 continue
+
+#             if (row_index, col_index) in seen:
+#                 continue
+
+#             # Case 3: door is full, Dd
+#             if current_char == 'D' and level[row_index + 1][col_index] == 'd':
+#                 seen.add((row_index, col_index))
+#                 seen.add((row_index + 1, col_index))
+#             else:
+#                 return False
+
+#     return True

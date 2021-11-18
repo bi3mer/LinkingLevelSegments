@@ -17,8 +17,8 @@ parser.add_argument(
     default=10,
     help='Set the # of runs for --average-generated.')
 parser.add_argument('--segments', type=int, default=3, help='set # of segments to be combined.')
-parser.add_argument('--src', type=str, default='0_0_0.txt', help='source segment linked with --debug-view-link')
-parser.add_argument('--tgt', type=str, default='0_0_0.txt', help='source segment linked with --debug-view-link')
+parser.add_argument('--src', type=str, default='0_0_0.txt', help='source segment linked with --debug-build-link and --debug-view-link')
+parser.add_argument('--tgt', type=str, default='0_0_0.txt', help='source segment linked with --debug-build-link and --debug-view-link')
 
 game_group = parser.add_mutually_exclusive_group(required=True)
 game_group.add_argument('--dungeongram', action='store_true', help='Run DungeonGrams')
@@ -71,7 +71,7 @@ elif args.test_links:
 elif args.link_stats:
     LinkStats(config, alg_type, args.seed).run()
 elif args.debug_build_link:
-    DEBUG_build_link(config, alg_type, args.seed).run()
+    DEBUG_build_link(config, alg_type, args.seed).run(args.src, args.tgt)
 elif args.debug_segments_are_valid:
     DEBUG_segments_are_valid(config, alg_type, args.seed).run()
 elif args.debug_test_levels:

@@ -1,35 +1,11 @@
 from collections import deque
 
-def __generate(grammar, prior, is_valid, connection):
-    output = []
-
-    while grammar.has_next_step(prior):
-        valid_found = False
-        for token in grammar.get_unweighted_output_list(prior):
-            new_output = output + [token]
-            prior = tuple(prior[1:]) + (token,)
-            if is_valid(connection(new_output)):
-                if len(new_output) > 4:
-                    from Config import DungeonGram
-                    from sys import exit
-                    print(DungeonGram.level(connection(new_output)))
-                    exit()
-                    
-                output = new_output
-                valid_found = True
-                break
-        
-        if not valid_found: 
-            break
-    
-    return output
-
 def build_link(start, end, config):
     if config.level_is_valid(start + end) and config.get_percent_playable(start + end) == 1.0:
         return []
 
-    START_LINK = __generate(config.FORWARD_STRUCTURE_GRAM, (start[-1],), config.level_is_valid, lambda link: start + link)
-    END_LINK = __generate(config.BACKWARD_STRUCTURE_GRAM, (end[0],), config.level_is_valid, lambda link: link + end)
+    START_LINK = config.FORWARD_STRUCTURE_GRAM.get_output(start)
+    END_LINK = config.BACKWARD_STRUCTURE_GRAM.get_output(end)
     END_LINK = list(reversed(END_LINK))
 
     assert start + START_LINK + END_LINK + end

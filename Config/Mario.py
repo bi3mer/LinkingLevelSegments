@@ -1,7 +1,7 @@
-from Game.Mario.IO import get_levels
+from Game.Mario.IO import get_levels, level_to_str
 from Game.Mario.Behavior import *
 from Game.Mario.Fitness import *
-from Utility import NGram
+from Utility import NGram, StructureChain
 from Utility.GridTools import rows_into_columns
 from Utility.LinkerGeneration import *
 
@@ -14,14 +14,23 @@ resolution = 40
 lines_to_level = rows_into_columns
 link_distance_dependent = False
 
+BETWEN_LINK_TOKEN = '              '
+
 n = 3
 gram = NGram(n)
 unigram = NGram(1)
-levels = get_levels(lines_to_level)
-for level in levels:
+FORWARD_STRUCTURE_GRAM = StructureChain(['[',']'])
+BACKWARD_STRUCTURE_GRAM = StructureChain(['[',']'], backward=True)
+LEVELS = get_levels(lines_to_level)
+
+for level in LEVELS:
     gram.add_sequence(level)
     unigram.add_sequence(level)
 
+    FORWARD_STRUCTURE_GRAM.add_sequence(level)
+    BACKWARD_STRUCTURE_GRAM.add_sequence(level)
+
+MAX_STRUCTURE_SIZE = 2
 ELITES_PER_BIN = 4
 
 unigram_keys = set(unigram.grammar[()].keys())

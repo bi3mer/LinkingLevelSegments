@@ -23,12 +23,8 @@ class DEBUG_build_link:
 
 
         LINK = TreeSearch.build_link(SOURCE, TARGET, self.config)
-
-
-        LEVEL = SOURCE + [self.config.BETWEN_LINK_TOKEN] + LINK + [self.config.BETWEN_LINK_TOKEN] + TARGET
-
-        print(self.config.level_to_str(LEVEL))
-        print(self.config.level_is_valid(LEVEL))
+        print(self.config.level_to_str(SOURCE + [self.config.BETWEN_LINK_TOKEN] + LINK + [self.config.BETWEN_LINK_TOKEN] + TARGET))
+        print(self.config.level_is_valid(SOURCE + LINK + TARGET))
 
         # f = open('temp.txt')
         # lvl = self.config.lines_to_level(f.readlines())

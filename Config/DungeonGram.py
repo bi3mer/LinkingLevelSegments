@@ -1,3 +1,4 @@
+from Utility.StructureChain import StructureChain
 from dungeongrams.dungeongrams import *
 from Game.DungeonGram.IO import get_levels, level_to_str
 from Game.DungeonGram.Behavior import *
@@ -22,15 +23,15 @@ BETWEN_LINK_TOKEN = '           '
 n = 3
 gram = NGram(n)
 unigram = NGram(1)
-FORWARD_STRUCTURE_GRAM = NGram(2)
-BACKWARD_STRUCTURE_GRAM = NGram(2)
+FORWARD_STRUCTURE_GRAM = StructureChain(['\\', '/'])
+BACKWARD_STRUCTURE_GRAM = StructureChain(['\\', '/'], backward=True)
 levels = get_levels(lines_to_level)
 for level in levels:
     gram.add_sequence(level)
     unigram.add_sequence(level)
 
-    FORWARD_STRUCTURE_GRAM.add_sequence(level, filter=lambda row: '/' in row or '\\' in row)
-    BACKWARD_STRUCTURE_GRAM.add_sequence(level, backward=True, filter=lambda row: '/' in row or '\\' in row)
+    FORWARD_STRUCTURE_GRAM.add_sequence(level)
+    BACKWARD_STRUCTURE_GRAM.add_sequence(level)
 
 ELITES_PER_BIN = 4
 

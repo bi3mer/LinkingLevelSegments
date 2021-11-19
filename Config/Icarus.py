@@ -1,3 +1,4 @@
+from Utility.StructureChain import StructureChain
 from dungeongrams.dungeongrams import *
 from Game.Icarus.IO import get_levels, level_to_str
 from Game.Icarus.Behavior import *
@@ -20,16 +21,16 @@ BETWEN_LINK_TOKEN = '                '
 n = 2
 gram = NGram(n)
 unigram = NGram(1)
-FORWARD_STRUCTURE_GRAM = NGram(2)
-BACKWARD_STRUCTURE_GRAM = NGram(2)
+FORWARD_STRUCTURE_GRAM = StructureChain(['d', 'D'])
+BACKWARD_STRUCTURE_GRAM = StructureChain(['d', 'D'], backward=True)
 LEVELS = get_levels(lines_to_level)
 
 for level in LEVELS:
     gram.add_sequence(level)
     unigram.add_sequence(level)
 
-    FORWARD_STRUCTURE_GRAM.add_sequence(level, filter=lambda row: 'd' in row or 'D' in row)
-    BACKWARD_STRUCTURE_GRAM.add_sequence(level, backward=True, filter=lambda row: 'd' in row or 'D' in row)
+    FORWARD_STRUCTURE_GRAM.add_sequence(level)
+    BACKWARD_STRUCTURE_GRAM.add_sequence(level)
 
 ELITES_PER_BIN = 4
 

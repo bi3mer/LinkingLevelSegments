@@ -19,5 +19,5 @@ def get_levels(lines_to_level):
 
     return levels
 
-def write_level(f, columns):
-    f.write(columns_into_grid_string(columns))
+def level_to_str(columns):
+    return columns_into_grid_string(columns)

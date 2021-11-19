@@ -77,7 +77,7 @@ class GenerateLinks:
                     
                     start = entry
                     for n_index, n_entry in enumerate(bins[neighbor]):
-                        update_progress(i/(len(keys)*19))
+                        update_progress(i/(len(keys)*50))
                         i += 1
 
                         if n_entry == None:

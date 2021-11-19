@@ -56,8 +56,6 @@ class GenerateLinks:
         link_count = 0
 
         for k in keys: 
-            if i >= 500: break
-
             for entry_index, entry in enumerate(bins[k]):
                 if entry == None:
                     continue
@@ -81,7 +79,6 @@ class GenerateLinks:
                     for n_index, n_entry in enumerate(bins[neighbor]):
                         update_progress(i/(len(keys)*19))
                         i += 1
-                        if i >= 500: break
 
                         if n_entry == None:
                             continue

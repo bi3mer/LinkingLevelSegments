@@ -1,4 +1,5 @@
 from .GenerateLinks import GenerateLinks
+from .Walkthrough import Walkthrough
 from .TestLinks import TestLinks
 from .LinkStats import LinkStats
 

@@ -1,6 +1,7 @@
 from os.path import join, exists, isdir
 from random import seed as random_seed
 from Utility.GridTools import columns_into_grid_string
+from Utility.ProgressBar import update_progress
 
 from Utility.LinkerGeneration import *
 from Utility import rows_into_columns
@@ -67,8 +68,9 @@ class TestLinks:
             'tree search': [0, 0],
             'concatenate': [0, 0]
         }
-
-        for src_str in graph:
+        keys = list(graph.keys())
+        for progress, src_str in enumerate(keys):
+            update_progress((progress + 1) / len(keys))
             src, src_index = self.__string_to_key_and_index(src_str)
             for dst_str in graph[src_str]:
                 dst, dst_index = self.__string_to_key_and_index(dst_str)
@@ -98,8 +100,7 @@ class TestLinks:
 
                 # this second part is extra error checking so it has some extra 
                 # work done but speed isn't a concern
-                if graph[src_str][dst_str][LINKER]['percent_playable'] != 1.0:
-                    continue
+                expected_percent_playable = graph[src_str][dst_str][LINKER]['percent_playable']
                 
                 if graph[src_str][dst_str][LINKER]['link'] == None:
                     level = bins[src][src_index] + bins[dst][dst_index]
@@ -107,6 +108,15 @@ class TestLinks:
                     level = bins[src][src_index] + \
                             graph[src_str][dst_str][LINKER]['link'] + \
                             bins[dst][dst_index]
+
+                if self.config.get_percent_playable(level) != expected_percent_playable:
+                    print('Playability scores do not match!')
+                    print(f'Source: {src_str}')
+                    print(f'Destination: {dst_str}')
+                    print(columns_into_grid_string(level))
+
+                if expected_percent_playable != 1.0:
+                    continue
 
                 if not self.config.level_is_valid(level):
                     print('Sequence not possible!')

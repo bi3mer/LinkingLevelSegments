@@ -5,6 +5,8 @@ modified directly from:
 '''
 
 from heapq import heappush, heappop
+
+from Game.Icarus.IO import level_to_str
 from .config import JUMPS, SOLIDS
 
 DEBUG_DISPLAY = False
@@ -163,6 +165,7 @@ def percent_completable(src, levelStr):
 
                         print('path', list(reversed(full_path)))
                         displayLevel()
+                        print( (maxY - furthest_y) / maxY)
                         
                     break
                 

@@ -18,20 +18,11 @@ class DEBUG_build_link:
         with open(join(LEVEL_DIR, f'{tgt}.txt'), 'r') as level_file:
             TARGET = self.config.lines_to_level(level_file.readlines())
 
-        src = ','.join(src.split('_'))
-        tgt = ','.join(tgt.split('_'))
-
-
         LINK = TreeSearch.build_link(SOURCE, TARGET, self.config)
         print(self.config.level_to_str(SOURCE + [self.config.BETWEN_LINK_TOKEN] + LINK + [self.config.BETWEN_LINK_TOKEN] + TARGET))
-        print(self.config.level_is_valid(SOURCE + LINK + TARGET))
-
-        # f = open('temp.txt')
-        # lvl = self.config.lines_to_level(f.readlines())
-        # f.close()
-
-        # print(self.config.level_to_str(lvl))
-
-        
-        # print(self.config.level_to_str(lvl + link + lvl))
-        
+        print()
+        print(f'is valid: {self.config.level_is_valid(SOURCE + LINK + TARGET)}')
+        print(f'playable: {self.config.get_percent_playable(SOURCE + LINK + TARGET)}')
+        print(f'is valid: {self.config.level_is_valid(TARGET + LINK + SOURCE)}')
+        print(f'playable: {self.config.get_percent_playable(TARGET + LINK + SOURCE)}')
+        print()

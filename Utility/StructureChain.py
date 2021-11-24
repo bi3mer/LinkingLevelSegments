@@ -54,7 +54,7 @@ class StructureChain:
                 best_prior = prior
         
         if best_prior == None:
-            return []
+            return [[]]
         else:
-            return choice(self.markov_chain[best_prior])
+            return self.markov_chain[best_prior]
  

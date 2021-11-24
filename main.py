@@ -16,7 +16,6 @@ parser.add_argument(
     type=int,
     default=10,
     help='Set the # of runs for --average-generated.')
-parser.add_argument('--segments', type=int, default=3, help='set # of segments to be combined.')
 parser.add_argument('--src', type=str, default='0_0_0.txt', help='source segment linked with --debug-build-link and --debug-view-link')
 parser.add_argument('--tgt', type=str, default='0_0_0.txt', help='source segment linked with --debug-build-link and --debug-view-link')
 
@@ -35,6 +34,7 @@ task_group = parser.add_mutually_exclusive_group(required=True)
 task_group.add_argument('--generate-links', action='store_true', help='Build plots from data generated in GramElitesData')
 task_group.add_argument('--test-links', action='store_true', help='Test all links built with --generate-links')
 task_group.add_argument('--link-stats', action='store_true', help='Get stats of links built with --generate-links')
+task_group.add_argument('--walkthrough', action='store_true', help='Run walkthrough and use --segments argument')
 task_group.add_argument('--debug-build-link', action='store_true', help='DEBUG that building a link between two training levels works')
 task_group.add_argument('--debug-segments-are-valid', action='store_true', help='DEBUG that all segments in GramElitesData are valid for an [alg-type]')
 task_group.add_argument('--debug-test-levels', action='store_true', help='DEBUG test levels in the test_levels directory for level_is_valid')
@@ -70,6 +70,8 @@ elif args.test_links:
     TestLinks(config, alg_type, args.seed).run()
 elif args.link_stats:
     LinkStats(config, alg_type, args.seed).run()
+elif args.walkthrough:
+    Walkthrough(config, alg_type, args.seed).run()
 elif args.debug_build_link:
     DEBUG_build_link(config, alg_type, args.seed).run(args.src, args.tgt)
 elif args.debug_segments_are_valid:

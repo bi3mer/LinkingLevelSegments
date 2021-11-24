@@ -53,7 +53,7 @@ class Walkthrough:
 
         #######################################################################
         print('Running Walkthrough')
-        TOTAL = 25
+        TOTAL = 1000
         playability_scores = {}
         src_keys = list(graph.keys())
 

@@ -1,3 +1,4 @@
+from .WalkthroughStats import WalkthroughStats
 from .GenerateLinks import GenerateLinks
 from .Walkthrough import Walkthrough
 from .TestLinks import TestLinks

@@ -57,7 +57,7 @@ class Walkthrough:
         playability_scores = {}
         src_keys = list(graph.keys())
 
-        for k in range(3,6): 
+        for k in range(2,6): 
             print(f'K={k}')
         
             levels_found = 0

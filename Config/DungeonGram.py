@@ -41,7 +41,8 @@ unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigra
 
 LINKERS = [
     ['-----&-----'],
-    ['-----------'],
+    ['---------&-'],
+    ['-&---------'],
 ]
 MAX_LINK_LENGTH = 4
 

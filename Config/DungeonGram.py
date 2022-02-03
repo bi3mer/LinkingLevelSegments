@@ -45,6 +45,7 @@ LINKERS = [
     ['-&---------'],
 ]
 MAX_LINK_LENGTH = 4
+ALLOW_EMPTY_LINK = False
 
 
 def get_percent_playable(level, thorough=False, agent=None):

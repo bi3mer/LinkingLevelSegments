@@ -43,6 +43,7 @@ LINKERS = [
     ['XXX----XX----XXX'],
     ['----------------'],
 ]
+ALLOW_EMPTY_LINK = True
 
 MAX_LINK_LENGTH = 7
 

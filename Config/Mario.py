@@ -39,6 +39,7 @@ pruned = gram.fully_connect() # remove dead ends from grammar
 unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigram
 
 LINKERS = [[o] for o in unigram_keys]
+ALLOW_EMPTY_LINK = True
 
 link_keys = unigram_keys
 max_path_length = 5

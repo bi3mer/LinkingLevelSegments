@@ -1,7 +1,10 @@
 from collections import deque
 
 def build_link(start, end, config):
-    if config.level_is_valid(start + end) and config.get_percent_playable(start + end) == 1.0:
+    if config.ALLOW_EMPTY_LINK and \
+       config.level_is_valid(start + end) and \
+       config.get_percent_playable(start + end) == 1.0:
+
         return []
 
     for START_LINK in config.FORWARD_STRUCTURE_GRAM.get_output(start):

@@ -122,7 +122,7 @@ class Walkthrough:
 
         print()
 
-        for k in range(3, 6):
+        for k in range(2, 6):
             scores = [s for s in playability_scores[k].values()]
             print(f'K={k}')
             print(f'min: {min(scores)}')

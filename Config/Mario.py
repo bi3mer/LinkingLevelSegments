@@ -55,6 +55,7 @@ fitness = lambda lvl: get_fitness(lvl, get_percent_playable(lvl))
 
 def level_is_valid(level):
     # check for malformed pipes
+    valid_pipes = set()
     for col_index in range(len(level)):
         for row_index in range(len(level[0])):
             if level[col_index][row_index] == '[':
@@ -63,5 +64,14 @@ def level_is_valid(level):
 
                 if level[col_index + 1][row_index] != ']':
                     return False
+
+                # print(1, col_index, row_index)
+                # print(2, col_index + 1, row_index)
+                valid_pipes.add((col_index, row_index))
+                valid_pipes.add((col_index + 1, row_index))
+                
+            elif level[col_index][row_index] == ']' and (col_index, row_index) not in valid_pipes:
+                # print(3, col_index, row_index)
+                return False
 
     return True

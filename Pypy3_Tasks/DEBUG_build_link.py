@@ -23,6 +23,4 @@ class DEBUG_build_link:
         print()
         print(f'is valid: {self.config.level_is_valid(SOURCE + LINK + TARGET)}')
         print(f'playable: {self.config.get_percent_playable(SOURCE + LINK + TARGET)}')
-        print(f'is valid: {self.config.level_is_valid(TARGET + LINK + SOURCE)}')
-        print(f'playable: {self.config.get_percent_playable(TARGET + LINK + SOURCE)}')
         print()

@@ -1,5 +1,4 @@
 from collections import deque
-
 def build_link(start, end, config):
     if config.ALLOW_EMPTY_LINK and \
        config.level_is_valid(start + end) and \
@@ -23,6 +22,7 @@ def build_link(start, end, config):
                 NEW_LEVEL = start + START_LINK + current_path + END_LINK + end
 
                 if config.get_percent_playable(NEW_LEVEL) == 1.0:
+                    assert config.level_is_valid(NEW_LEVEL)
                     return START_LINK + current_path + END_LINK
                 else:
                     fitness_calculations += 1

@@ -70,8 +70,9 @@ def level_is_valid(level):
                 valid_pipes.add((col_index, row_index))
                 valid_pipes.add((col_index + 1, row_index))
                 
-            elif level[col_index][row_index] == ']' and (col_index, row_index) not in valid_pipes:
-                # print(3, col_index, row_index)
+            elif level[col_index][row_index] == ']' and \
+                (col_index, row_index) not in valid_pipes and \
+                col_index != 0:
                 return False
 
     return True

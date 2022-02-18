@@ -17,7 +17,7 @@ class WalkthroughStats:
             print(f'{LEVEL_DIR} does not exist. Please initialize the submodule first..')
             return
       
-        with open(join(DATA_DIR, f'walkthrough.json')) as f:
+        with open(join(DATA_DIR, f'walkthrough_{self.config.ALLOW_EMPTY_LINK}.json')) as f:
             graph = json_load_file(f)
 
         for k in sorted(list(graph.keys())):

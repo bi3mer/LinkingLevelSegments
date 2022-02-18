@@ -9,7 +9,7 @@ from Pypy3_Tasks import DEBUG_build_link
 
 start = time()
 
-parser = argparse.ArgumentParser(description='Gram-Elites')
+parser = argparse.ArgumentParser(description='Linking Level Segments')
 parser.add_argument('--seed', type=int, default=0, help='Set seed for generation')
 parser.add_argument('--allow-empty-link', type=bool, default=True, help='Allow links to be empty')
 parser.add_argument(

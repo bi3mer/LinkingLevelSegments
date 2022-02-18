@@ -11,6 +11,7 @@ start = time()
 
 parser = argparse.ArgumentParser(description='Gram-Elites')
 parser.add_argument('--seed', type=int, default=0, help='Set seed for generation')
+parser.add_argument('--allow-empty-link', type=bool, default=True, help='Allow links to be empty')
 parser.add_argument(
     '--runs', 
     type=int,
@@ -49,6 +50,8 @@ elif args.mario:
     config = Mario
 elif args.icarus:
     config = Icarus
+
+config.ALLOW_EMPTY_LINK = args.allow_empty_link
 
 if args.n_gram_placement:
     alg_type = 'n_gram'

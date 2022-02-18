@@ -117,7 +117,7 @@ class Walkthrough:
                         update_progress(levels_found/TOTAL)
 
 
-        with open(join(DATA_DIR, 'walkthrough.json'), 'w') as f:
+        with open(join(DATA_DIR, f'walkthrough_{self.config.ALLOW_EMPTY_LINK}.json'), 'w') as f:
             json_dump_file(playability_scores, f, indent=2)
 
         print()

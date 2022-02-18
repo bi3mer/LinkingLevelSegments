@@ -122,6 +122,6 @@ class GenerateLinks:
 
             i += 1
 
-        with open(join(DATA_DIR, f'links.json'), 'w') as f:
+        with open(join(DATA_DIR, f'links_{self.config.ALLOW_EMPTY_LINK}.json'), 'w') as f:
             json_dump_file(dda_graph, f, indent=1)
 

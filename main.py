@@ -11,7 +11,6 @@ start = time()
 
 parser = argparse.ArgumentParser(description='Linking Level Segments')
 parser.add_argument('--seed', type=int, default=0, help='Set seed for generation')
-parser.add_argument('--allow-empty-link', type=bool, default=True, help='Allow links to be empty')
 parser.add_argument(
     '--runs', 
     type=int,
@@ -19,6 +18,10 @@ parser.add_argument(
     help='Set the # of runs for --average-generated.')
 parser.add_argument('--src', type=str, default='0_0_0.txt', help='source segment linked with --debug-build-link and --debug-view-link')
 parser.add_argument('--tgt', type=str, default='0_0_0.txt', help='source segment linked with --debug-build-link and --debug-view-link')
+
+empty_link_group = parser.add_mutually_exclusive_group(required=True)
+empty_link_group.add_argument('--allow-empty-link', action='store_true', help='Allow links to be empty')
+empty_link_group.add_argument('--no-empty-link', action='store_true', help='Allow links to be empty')
 
 game_group = parser.add_mutually_exclusive_group(required=True)
 game_group.add_argument('--dungeongram', action='store_true', help='Run DungeonGrams')
@@ -51,7 +54,10 @@ elif args.mario:
 elif args.icarus:
     config = Icarus
 
-config.ALLOW_EMPTY_LINK = args.allow_empty_link
+if args.allow_empty_link:
+    config.ALLOW_EMPTY_LINK = True
+else:
+    config.ALLOW_EMPTY_LINK = False
 
 if args.n_gram_placement:
     alg_type = 'n_gram'

@@ -5,7 +5,6 @@ SOLIDS.add('T')
 SOLIDS.add('X')
 SOLIDS.add('D')
 SOLIDS.add('d')
-SOLIDS.add('H')
 
 DOOR = 'D'
 MOVING = 'M'

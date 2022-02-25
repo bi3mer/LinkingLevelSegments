@@ -59,6 +59,8 @@ if args.allow_empty_link:
 else:
     config.ALLOW_EMPTY_LINK = False
 
+print(f'Empty links allowed: {config.ALLOW_EMPTY_LINK}')
+
 if args.n_gram_placement:
     alg_type = 'n_gram'
 elif args.map_elites:

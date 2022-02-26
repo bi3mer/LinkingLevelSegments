@@ -46,7 +46,7 @@ class TestLinks:
 
         #######################################################################
         print('Loading links...')
-        with open(join(DATA_DIR, f'links.json')) as f:
+        with open(join(DATA_DIR, f'links_{self.config.ALLOW_EMPTY_LINK}.json')) as f:
             graph = json_load_file(f)
 
         #######################################################################
@@ -109,11 +109,11 @@ class TestLinks:
                             graph[src_str][dst_str][LINKER]['link'] + \
                             bins[dst][dst_index]
 
-                if self.config.get_percent_playable(level) != expected_percent_playable:
-                    print('Playability scores do not match!')
-                    print(f'Source: {src_str}')
-                    print(f'Destination: {dst_str}')
-                    print(columns_into_grid_string(level))
+                # if self.config.get_percent_playable(level) != expected_percent_playable:
+                #     print('Playability scores do not match!')
+                #     print(f'Source: {src_str}')
+                #     print(f'Destination: {dst_str}')
+                #     print(columns_into_grid_string(level))
 
                 if expected_percent_playable != 1.0:
                     continue
@@ -134,4 +134,10 @@ class TestLinks:
             print(f'{link_name}:')
             print(f'{valid_counts[link_name][0]} out of {valid_counts[link_name][1]} are valid.')
             print(f'{playable_counts[link_name][0]} out of {playable_counts[link_name][1]} are playable.')
-            print(f'{valid_and_playable_counts[link_name][0]} out of {valid_and_playable_counts[link_name][1]} are both.\n')
+            print(f'{valid_and_playable_counts[link_name][0]} out of {valid_and_playable_counts[link_name][1]} are both.')
+            print()
+            print(f'unbroken: {valid_counts[link_name][0] / valid_counts[link_name][1]}')
+            print(f'completable: {playable_counts[link_name][0] / playable_counts[link_name][1]}')
+            print(f'usable: {valid_and_playable_counts[link_name][0] / valid_and_playable_counts[link_name][1]}')
+            print()
+            print()

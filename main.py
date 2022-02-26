@@ -16,8 +16,8 @@ parser.add_argument(
     type=int,
     default=10,
     help='Set the # of runs for --average-generated.')
-parser.add_argument('--src', type=str, default='0_0_0.txt', help='source segment linked with --debug-build-link and --debug-view-link')
-parser.add_argument('--tgt', type=str, default='0_0_0.txt', help='source segment linked with --debug-build-link and --debug-view-link')
+
+parser.add_argument('--path', type=str, help="Path found in walkthrough file (e.g. \"3,10,1|2,10,1|2,11,2\"")
 
 empty_link_group = parser.add_mutually_exclusive_group(required=True)
 empty_link_group.add_argument('--allow-empty-link', action='store_true', help='Allow links to be empty')
@@ -28,8 +28,7 @@ game_group.add_argument('--dungeongram', action='store_true', help='Run DungeonG
 game_group.add_argument('--mario', action='store_true', help='Run Mario')
 game_group.add_argument('--icarus', action='store_true', help='Run Icarus')
 
-arg_exists = any(['--generate-links' in sys.argv, '--debug-segments-are-valid' in sys.argv])
-algorithm_group = parser.add_mutually_exclusive_group(required=arg_exists)
+algorithm_group = parser.add_mutually_exclusive_group(required=True)
 algorithm_group.add_argument('--n-gram-placement', action='store_true', help='Segments from N-Grams with placement into bins')
 algorithm_group.add_argument('--map-elites', action='store_true', help='Segments from MAP-Elites with standard operators')
 algorithm_group.add_argument('--gram-elites', action='store_true', help='Segments from Gram-Elites')
@@ -85,13 +84,13 @@ elif args.walkthrough:
 elif args.walkthrough_stats:
     WalkthroughStats(config, alg_type, args.seed).run()
 elif args.debug_build_link:
-    DEBUG_build_link(config, alg_type, args.seed).run(args.src, args.tgt)
+    DEBUG_build_link(config, alg_type, args.seed).run(args.path)
 elif args.debug_segments_are_valid:
     DEBUG_segments_are_valid(config, alg_type, args.seed).run()
 elif args.debug_test_levels:
     DEBUG_test_levels(config, alg_type).run()
 elif args.debug_view_link:
-    DEBUG_view_link(config, alg_type).run(args.src, args.tgt)
+    DEBUG_view_link(config, alg_type).run(args.path)
 
 end = time()
 

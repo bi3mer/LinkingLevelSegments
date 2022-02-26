@@ -6,26 +6,36 @@ class DEBUG_view_link:
         self.alg_type = alg_type
         self.config = config
 
-    def run(self, src, tgt):
+    def run(self, path):
+        # sample_path: 3,10,1|2,10,1|2,11,2
         DATA_DIR = join('GramElitesData', self.config.data_dir, self.alg_type)
         LEVEL_DIR =  join(DATA_DIR, 'levels')
-        with open(join(LEVEL_DIR, f'{src}.txt'), 'r') as level_file:
-            SOURCE = self.config.lines_to_level(level_file.readlines())
 
-        with open(join(LEVEL_DIR, f'{tgt}.txt'), 'r') as level_file:
-            TARGET = self.config.lines_to_level(level_file.readlines())
+        nodes = path.split('|')
+        segments = []
 
-        src = ','.join(src.split('_'))
-        tgt = ','.join(tgt.split('_'))
-
-        with open(join(DATA_DIR, f'links.json')) as f:
+        for link_name in nodes:
+            fname = '_'.join(link_name.split(','))
+            with open(join(LEVEL_DIR, f'{fname}.txt'), 'r') as level_file:
+                segments.append(self.config.lines_to_level(level_file.readlines()))
+        
+        link_file = join(DATA_DIR, f'links_{self.config.ALLOW_EMPTY_LINK}.json')
+        print(f'Reading links: {link_file}')
+        with open(link_file) as f:
             links = json_load_file(f)
 
-        LINK = links[src][tgt]['tree search']['link']
-        LEVEL = SOURCE + [self.config.BETWEN_LINK_TOKEN] + LINK + [self.config.BETWEN_LINK_TOKEN] + TARGET
+        level = segments[0]
+        for i in range(1, len(nodes)):
+            print(nodes[i-1], nodes[i])
+            level += [self.config.BETWEN_LINK_TOKEN]
+            level += links[nodes[i-1]][nodes[i]]['tree search']['link'] 
+            level += [self.config.BETWEN_LINK_TOKEN]            
+            level += segments[i]
 
-        print(self.config.level_to_str(LEVEL))
-        print(self.config.level_is_valid(LEVEL))
+        # LEVEL = SOURCE + [self.config.BETWEN_LINK_TOKEN] + LINK + [self.config.BETWEN_LINK_TOKEN] + TARGET
+
+        print(self.config.level_to_str(level))
+        print(self.config.level_is_valid(level))
 
 
         

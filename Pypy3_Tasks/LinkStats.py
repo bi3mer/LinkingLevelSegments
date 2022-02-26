@@ -18,7 +18,7 @@ class LinkStats:
             print(f'{LEVEL_DIR} does not exist. Please initialize the submodule first..')
             return
       
-        with open(join(DATA_DIR, f'links.json')) as f:
+        with open(join(DATA_DIR, f'links_{self.config.ALLOW_EMPTY_LINK}.json')) as f:
             graph = json_load_file(f)
 
         links = {}

@@ -9,18 +9,34 @@ class DEBUG_build_link:
         self.config = config
         random_seed(seed)
 
-    def run(self, src, tgt):
+    def run(self, path):
+        # sample_path: 3,10,1|2,10,1|2,11,2
         DATA_DIR = join('GramElitesData', self.config.data_dir, self.alg_type)
         LEVEL_DIR =  join(DATA_DIR, 'levels')
-        with open(join(LEVEL_DIR, f'{src}.txt'), 'r') as level_file:
-            SOURCE = self.config.lines_to_level(level_file.readlines())
 
-        with open(join(LEVEL_DIR, f'{tgt}.txt'), 'r') as level_file:
-            TARGET = self.config.lines_to_level(level_file.readlines())
+        nodes = path.split('|')
+        segments = []
 
-        LINK = TreeSearch.build_link(SOURCE, TARGET, self.config)
-        print(self.config.level_to_str(SOURCE + [self.config.BETWEN_LINK_TOKEN] + LINK + [self.config.BETWEN_LINK_TOKEN] + TARGET))
+        for link_name in nodes:
+            fname = '_'.join(link_name.split(','))
+            with open(join(LEVEL_DIR, f'{fname}.txt'), 'r') as level_file:
+                segments.append(self.config.lines_to_level(level_file.readlines()))
+        
+        print_lvl = segments[0].copy()
+        play_lvl = segments[0].copy()
+
+        for i in range(1, len(segments)):
+            LINKER = TreeSearch.build_link(segments[i-1], segments[i], self.config)
+            print_lvl += [self.config.BETWEN_LINK_TOKEN]
+            print_lvl += LINKER
+            print_lvl += [self.config.BETWEN_LINK_TOKEN]            
+            print_lvl += segments[i].copy()
+
+            play_lvl += LINKER
+            play_lvl += segments[i].copy()
+
+        print(self.config.level_to_str(print_lvl))
         print()
-        print(f'is valid: {self.config.level_is_valid(SOURCE + LINK + TARGET)}')
-        print(f'playable: {self.config.get_percent_playable(SOURCE + LINK + TARGET)}')
+        print(f'is valid: {self.config.level_is_valid(play_lvl)}')
+        print(f'playable: {self.config.get_percent_playable(play_lvl)}')
         print()

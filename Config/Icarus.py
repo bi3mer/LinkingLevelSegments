@@ -45,7 +45,7 @@ LINKERS = [
 ]
 ALLOW_EMPTY_LINK = True
 
-MAX_LINK_LENGTH = 7
+MAX_LINK_LENGTH = 5
 
 fitness = lambda level: get_fitness(level, get_percent_playable(level))
 is_vertical = True

@@ -51,4 +51,11 @@ pypy3 main.py --help
 
 ## Citation 
 
-TBD
+```
+@article{biemer2022linking,
+  title={On Linking Level Segments},
+  author={Biemer, Colan and Cooper, Seth},
+  journal={arXiv preprint arXiv:2203.05057},
+  year={2022}
+}
+```

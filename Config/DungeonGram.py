@@ -47,6 +47,9 @@ LINKERS = [
 MAX_LINK_LENGTH = 4
 ALLOW_EMPTY_LINK = True
 
+FEATURE_NAMES = ['density', 'leniency']
+FEATURE_DESCRIPTORS = [density, leniency]
+
 def get_percent_playable(level, thorough=False, agent=None):
     if agent == None:
         agent = FLAW_NO_FLAW

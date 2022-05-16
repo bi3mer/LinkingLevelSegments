@@ -30,7 +30,6 @@ for level in LEVELS:
     FORWARD_STRUCTURE_GRAM.add_sequence(level)
     BACKWARD_STRUCTURE_GRAM.add_sequence(level)
 
-
 MAX_STRUCTURE_SIZE = 2
 ELITES_PER_BIN = 4
 
@@ -40,6 +39,9 @@ unigram_keys.difference_update(pruned) # remove any n-gram dead ends from unigra
 
 LINKERS = [[o] for o in unigram_keys]
 ALLOW_EMPTY_LINK = True
+
+FEATURE_NAMES = ['linearity', 'leniency']
+FEATURE_DESCRIPTORS = [percent_linearity, percent_leniency]
 
 link_keys = unigram_keys
 max_path_length = 5

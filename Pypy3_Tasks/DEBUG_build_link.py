@@ -27,9 +27,9 @@ class DEBUG_build_link:
 
         for i in range(1, len(segments)):
             LINKER = TreeSearch.build_link(segments[i-1], segments[i], self.config)
-            print_lvl += [self.config.BETWEN_LINK_TOKEN]
+            print_lvl += [self.config.BETWEEN_LINK_TOKEN]
             print_lvl += LINKER
-            print_lvl += [self.config.BETWEN_LINK_TOKEN]            
+            print_lvl += [self.config.BETWEEN_LINK_TOKEN]            
             print_lvl += segments[i].copy()
 
             play_lvl += LINKER

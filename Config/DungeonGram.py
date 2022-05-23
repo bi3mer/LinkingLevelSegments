@@ -18,13 +18,14 @@ resolution = 40
 lines_to_level = rows_into_columns
 link_distance_dependent = True
 
-BETWEN_LINK_TOKEN = '           '
+BETWEEN_LINK_TOKEN = '           '
 
 n = 3
 gram = NGram(n)
 unigram = NGram(1)
-FORWARD_STRUCTURE_GRAM = StructureChain(['\\', '/'])
-BACKWARD_STRUCTURE_GRAM = StructureChain(['\\', '/'], backward=True)
+FORWARD_STRUCTURE_GRAM = StructureChain(['\\', '/'], 4)
+BACKWARD_STRUCTURE_GRAM = StructureChain(['\\', '/'], 4,backward=True)
+
 levels = get_levels(lines_to_level)
 for level in levels:
     gram.add_sequence(level)

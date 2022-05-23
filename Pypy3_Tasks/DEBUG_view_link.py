@@ -27,12 +27,12 @@ class DEBUG_view_link:
         level = segments[0]
         for i in range(1, len(nodes)):
             print(nodes[i-1], nodes[i])
-            level += [self.config.BETWEN_LINK_TOKEN]
+            level += [self.config.BETWEEN_LINK_TOKEN]
             level += links[nodes[i-1]][nodes[i]]['tree search']['link'] 
-            level += [self.config.BETWEN_LINK_TOKEN]            
+            level += [self.config.BETWEEN_LINK_TOKEN]            
             level += segments[i]
 
-        # LEVEL = SOURCE + [self.config.BETWEN_LINK_TOKEN] + LINK + [self.config.BETWEN_LINK_TOKEN] + TARGET
+        # LEVEL = SOURCE + [self.config.BETWEEN_LINK_TOKEN] + LINK + [self.config.BETWEEN_LINK_TOKEN] + TARGET
 
         print(self.config.level_to_str(level))
         print(self.config.level_is_valid(level))

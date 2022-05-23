@@ -1,4 +1,5 @@
 from collections import deque
+
 def build_link(start, end, config):
     if config.ALLOW_EMPTY_LINK and \
        config.level_is_valid(start + end) and \

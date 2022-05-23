@@ -1,11 +1,11 @@
 from random import choice
 
 class StructureChain:
-    def __init__(self, structure_chars, backward=False):
+    def __init__(self, structure_chars, size, backward=False):
         self.filter = lambda row: any(char in row for char in structure_chars)
         self.markov_chain = {}
-        self.max_structure_size = 0
         self.backward = backward
+        self.max_structure_size = size
 
     def add_sequence(self, sequence):
         queue = []
@@ -16,10 +16,11 @@ class StructureChain:
         for token in sequence:
             if self.filter(token):
                 queue.append(token)
-                continue
-                
+
+                if len(queue) < self.max_structure_size:
+                    continue
+            
             if len(queue) > 1:
-                self.max_structure_size = max(self.max_structure_size, len(queue))
                 for i in range(1, len(queue)):
                     key = tuple(queue[0:i])
 
@@ -27,9 +28,6 @@ class StructureChain:
                         self.markov_chain[key].append(queue[i:len(queue)])
                     else:
                         self.markov_chain[key] = [queue[i:len(queue)]]
-
-                # import sys
-                # sys.exit(-1)
 
                 queue.clear()
 

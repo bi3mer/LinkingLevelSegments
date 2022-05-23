@@ -17,12 +17,12 @@ def lines_to_level(lines):
     return[l.strip() for l in reversed(lines)]
 
 
-BETWEN_LINK_TOKEN = '                '
+BETWEEN_LINK_TOKEN = '                '
 n = 2
 gram = NGram(n)
 unigram = NGram(1)
-FORWARD_STRUCTURE_GRAM = StructureChain(['d', 'D'])
-BACKWARD_STRUCTURE_GRAM = StructureChain(['d', 'D'], backward=True)
+FORWARD_STRUCTURE_GRAM = StructureChain(['d', 'D'], 2)
+BACKWARD_STRUCTURE_GRAM = StructureChain(['d', 'D'], 2, backward=True)
 LEVELS = get_levels(lines_to_level)
 
 for level in LEVELS:

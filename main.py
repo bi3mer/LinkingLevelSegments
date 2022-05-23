@@ -6,6 +6,7 @@ import argparse
 import sys
 
 from Pypy3_Tasks import DEBUG_build_link
+from Pypy3_Tasks import DEBUG_largest_link
 
 start = time()
 
@@ -43,6 +44,7 @@ task_group.add_argument('--debug-build-link', action='store_true', help='DEBUG t
 task_group.add_argument('--debug-segments-are-valid', action='store_true', help='DEBUG that all segments in GramElitesData are valid for an [alg-type]')
 task_group.add_argument('--debug-test-levels', action='store_true', help='DEBUG test levels in the test_levels directory for level_is_valid')
 task_group.add_argument('--debug-view-link', action='store_true', help='view a link between two segments')
+task_group.add_argument('--debug-largest-link', action='store_true', help='view the largest link between two segments')
 
 args = parser.parse_args()
 
@@ -91,6 +93,8 @@ elif args.debug_test_levels:
     DEBUG_test_levels(config, alg_type).run()
 elif args.debug_view_link:
     DEBUG_view_link(config, alg_type).run(args.path)
+elif args.debug_largest_link:
+    DEBUG_largest_link(config, alg_type).run()
 
 end = time()
 

@@ -1,8 +1,11 @@
+from math import sqrt
 from os.path import join, exists, isdir
 from random import seed as random_seed
 
 from Utility.LinkerGeneration import *
 from json import load as json_load_file
+
+from Utility.Math import mean, median
 
 class LinkStats:
     def __init__(self, config, alg_type, seed):
@@ -56,30 +59,21 @@ class LinkStats:
             print(f'{link}: {links[link]}')
 
         #######################################################################
-        print('\nAverage Length')
-        length = 0
-        total = 0
-        max_length = 0
+        lengths = []
 
         for src_str in graph:
             for dst_str in graph[src_str]:
                 l = graph[src_str][dst_str]['tree search']['link']
-                
-                max_length = max(max_length, len(l))
-                length += len(l)
-                total +=1
+                lengths.append(len(l))
 
-        print(f'Average Link Length: {length / total}')
-        print(f'Max Length: {max_length}')
+        print('\nLength')
+        print(f'min:    {min(lengths)}')
+        print(f'mean:   {mean(lengths)}')
+        print(f'median: {median(lengths)}')
+        print(f'max:    {max(lengths)}')
 
         #######################################################################
-        print('\nBehavioral Charecteristics')
-        res = {}
-        for name in self.config.FEATURE_NAMES:
-            res[name] = 0
-
-        total = 0
-
+        bc_diff = []
         for src_str in graph:
             src, src_index = self.__string_to_key_and_index(src_str)
             src_lvl = bins[src][src_index]
@@ -91,13 +85,17 @@ class LinkStats:
                 
                 concatenated_lvl = src_lvl + dst_lvl
                 linked_lvl = src_lvl + l + dst_lvl
+                total = 0
 
-                for name, f in zip(self.config.FEATURE_NAMES, self.config.FEATURE_DESCRIPTORS):
-                     res[name] += abs(f(linked_lvl) - f(concatenated_lvl))
+                for f in self.config.FEATURE_DESCRIPTORS:
+                    total += (abs(f(linked_lvl) - f(concatenated_lvl)))**2
 
-                total += 1
+                bc_diff.append(sqrt(total))
 
-        for name in self.config.FEATURE_NAMES:
-            print(f'{name}: {res[name] / total}')
+        print('\nBehavioral Characteristics')
+        print(f'min:    {min(bc_diff)}')
+        print(f'mean:   {mean(bc_diff)}')
+        print(f'median: {median(bc_diff)}')
+        print(f'max:    {max(bc_diff)}')
 
 

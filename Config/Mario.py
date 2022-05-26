@@ -44,7 +44,8 @@ FEATURE_NAMES = ['linearity', 'leniency']
 FEATURE_DESCRIPTORS = [percent_linearity, percent_leniency]
 
 link_keys = unigram_keys
-max_path_length = 5
+MAX_LINK_LENGTH = 7
+
 
 def get_percent_playable(level, agent=None):
     return percent_playable(level)
